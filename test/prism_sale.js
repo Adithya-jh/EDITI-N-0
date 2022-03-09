@@ -20,20 +20,49 @@ contract("prismSale", function (accounts) {
     assert.isTrue(charity == 0xce41cbD16FD67Dc0d190c50e2644fa5114a71886)   
   })
 
-  it("should split the payment",async function (){
-    const contract = await prismSale.deployed()
-    const startBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[1]))
-    
-    const purchase = await contract.buy.sendTransaction({
-      from: accounts[0],
-      value: web3.utils.toWei("0.01","ether")
-    })
+// test for owner 80%
 
-    const commission = web3.utils.toBN(await web3.utils.toWei("0.008","ether"))
+  // it("should split the payment for owner",async function (){
+  //   const contract = await prismSale.deployed()
+  //   const startBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[2]))
     
-    const endBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[1]))
-    console.log(startBalance);
-    console.log(endBalance);
+  //   const purchase = await contract.buy.sendTransaction({
+  //     from: accounts[0],
+  //     value: web3.utils.toWei("0.01","ether")
+  //   })
 
-  })
+  //   const commission = web3.utils.toBN(await web3.utils.toWei("0.008","ether"))
+
+  //   const endBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[2]))
+
+  //   assert.equal(startBalance.add(commission).toString(),endBalance.toString())
+
+  //   // console.log(startBalance);
+    
+  //   // console.log(endBalance);
+
+  // })
+
+  // test to charity account 20%
+
+  // it("should split the payment the charity",async function (){
+  //   const contract = await prismSale.deployed()
+  //   const startBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[3]))
+    
+  //   const purchase = await contract.buy.sendTransaction({
+  //     from: accounts[5],
+  //     value: web3.utils.toWei("0.01","ether")
+  //   })
+
+  //   const commission = web3.utils.toBN(await web3.utils.toWei("0.002","ether"))
+
+  //   const endBalance = web3.utils.toBN(await web3.eth.getBalance(accounts[3]))
+
+  //   assert.equal(startBalance.add(commission).toString(),endBalance.toString())
+
+  //   // console.log(startBalance);
+    
+  //   // console.log(endBalance);
+
+  // })
 });
