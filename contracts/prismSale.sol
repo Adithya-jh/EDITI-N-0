@@ -16,7 +16,7 @@ contract prismSale {
     totalSales = 0;
     maxSales = 100;
 
-    owner = 0xBE76F70775E9B8b9ce798BEe10B094B31a6498a6; //3rd one
+    owner = msg.sender; //3rd one
     charity = 0xce41cbD16FD67Dc0d190c50e2644fa5114a71886;//4th one
 
   }

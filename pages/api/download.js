@@ -11,5 +11,23 @@ const ok = (res) => {
 export default async function handler(req, res) {
   // TODO: make sure the download is only
   // accessible to people who own it
-  ok(res)
+  try{
+    const body = JSON.parse(req.body)
+    if(!body.signature){
+      notOk(res)
+    }
+
+    const account = web3.eth.accounts.recover(sharedMessage,body.signature)
+    contract.methods.hasAccess().call({from:account})
+    .then((data) => {
+      if(data){
+        ok(res)
+      } else{
+        notOk(res)
+      }
+    })
+
+  }catch(e){
+    notOk(res)
+  }
 }

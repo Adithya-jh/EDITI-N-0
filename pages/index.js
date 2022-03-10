@@ -20,24 +20,55 @@ export default function Home() {
   const connect = function () {
     // TODO: setAccounts
     // connect our page to the wallet
+    window.ethereum
+    .request({method: 'eth_requestAccounts'})
+    .then(setAccounts)
   }
 
   const checkAccess = function () {
     // TODO: setCanBuy
     // check if we have access
     // using accounts[0] and the contract
+    if(accounts.length >0){
+      contract.methods.hasAccess().call({from: accounts[0]})
+      .then(setHasAccess)
+    }else{
+      setHasAccess(false) 
+    }
   }
 
   const fetchCanBuy = async function () {
     // TODO: setTotalSales + setCanBuy
     // check if we can buy it (not sold out)
     // and check how many sold
+    contract.methods.canBuy().call()
+    .then(setCanBuy)
+
+    contract.methods.totalSales().call() //eventhough totalsales is a variable we have to call it this way.
+    .then(setTotalSales)
   }
 
   const buy = async function () {
     // TODO: transaction with contract
     // buy this from the contract by sending 0.01 ether
     // then once done, check access and update counts
+    if(accounts.length>0){
+
+      try{
+        const transaction = await  contract.methods.buy().send({
+          from: accounts[0],
+          value: web3.utils.toWei("0.01","ether")
+        }) // call() is for only readable func. send() is to change something in func. 
+
+        checkAccess()
+        fetchCanBuy()
+      }catch(e){
+         alert(e)
+      }
+
+    }else{
+      alert("Login to your account")
+    }
   }
 
   const download = async function () {
@@ -53,7 +84,7 @@ export default function Home() {
     
         const json = await r.json()
 
-        // window.location.href = json.url
+        window.location.href = json.url
       } catch (e) {
         alert("incorrect download url")
       }
@@ -65,7 +96,12 @@ export default function Home() {
   useEffect(() => {
     // TODO
     // set up wallet events and initial connection
-  }, [])
+    window.ethereum
+    .request({method:'eth_accounts'})
+    .then(setAccounts)
+
+    window.ethereum.on('accountsChanged',setAccounts)
+  }, []) 
 
   useEffect(() => {
     // check access if we change accounts
